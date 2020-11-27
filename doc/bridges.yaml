@@ -1,0 +1,121 @@
+---
+- :id: 1
+  :bridge_name: 橋梁４
+  :bridge_name_kana: キョウリョウ４
+  :route_name: 東西線
+  :address: 大阪府堺市中区深井沢町３３４７
+  :address_kana: オオサカフ　サカイシ　ナカク　フカイサワマチ　３３４７
+  :bridge_type: 
+  :load_limit: 
+  :location_longitude: 135.4985507
+  :location_latitude: 34.5305434
+  :road_condition: 生活道路
+  :alternative_road: true
+  :road_division_cd: 1
+  :emergency_transport_road: false
+  :traffic_volume: 500
+  :occupied_property: false
+  :occupied_property_name: ''
+  :construction_year: 1962
+  :bridge_length: 222
+  :bridge_width: 9
+  :number_of_piers: 2
+  :number_of_spans: 2
+  :number_of_griders: 1
+  :number_of_beams: 2
+- :id: 2
+  :bridge_name: 千代前橋
+  :bridge_name_kana: チヨマエハシ
+  :route_name: 町道布勢小学校線
+  :address: 仁多郡奥出雲町八代
+  :address_kana: ニタグンオクイズモチョウヤシロ
+  :bridge_type: 
+  :load_limit: 
+  :location_longitude: 133.0073426
+  :location_latitude: 35.2363622
+  :road_condition: 河川
+  :alternative_road: true
+  :road_division_cd: 1
+  :emergency_transport_road: false
+  :traffic_volume: 0
+  :occupied_property: false
+  :occupied_property_name: ''
+  :construction_year: 1969
+  :bridge_length: 7.7
+  :bridge_width: 3.3
+  :number_of_piers: 0
+  :number_of_spans: 0
+  :number_of_griders: 0
+  :number_of_beams: 0
+- :id: 3
+  :bridge_name: 宮の前橋
+  :bridge_name_kana: ミヤノマエバシ
+  :route_name: 町道八代三沢線
+  :address: 島根県仁多郡奥出雲町
+  :address_kana: シマネケンニタグンオクイズモチョウ
+  :bridge_type: 
+  :load_limit: 
+  :location_longitude: 133.0024194
+  :location_latitude: 35.197497
+  :road_condition: 八代川
+  :alternative_road: true
+  :road_division_cd: 1
+  :emergency_transport_road: false
+  :traffic_volume: 0
+  :occupied_property: false
+  :occupied_property_name: ''
+  :construction_year: 2010
+  :bridge_length: 17.2
+  :bridge_width: 8.2
+  :number_of_piers: 0
+  :number_of_spans: 0
+  :number_of_griders: 0
+  :number_of_beams: 0
+- :id: 4
+  :bridge_name: 鹿谷橋
+  :bridge_name_kana: シカダニハシ
+  :route_name: 町道梅木原線
+  :address: 奥出雲町亀嵩
+  :address_kana: オクイズモチョウカメダケ
+  :bridge_type: 
+  :load_limit: 
+  :location_longitude: 133.0874599
+  :location_latitude: 35.2213031
+  :road_condition: 鹿谷川
+  :alternative_road: true
+  :road_division_cd: 1
+  :emergency_transport_road: false
+  :traffic_volume: 0
+  :occupied_property: true
+  :occupied_property_name: 下水道
+  :construction_year: 1963
+  :bridge_length: 6.3
+  :bridge_width: 6.6
+  :number_of_piers: 0
+  :number_of_spans: 0
+  :number_of_griders: 0
+  :number_of_beams: 0
+- :id: 5
+  :bridge_name: 中山橋
+  :bridge_name_kana: ナカヤマハシ
+  :route_name: 川西五反田線
+  :address: 島根県仁多郡奥出雲町稲原26地先
+  :address_kana: シマネケンニタグンオクイズモチョウイナハラ２６チサキ
+  :bridge_type: 
+  :load_limit: 
+  :location_longitude: 133.096897
+  :location_latitude: 35.1766549
+  :road_condition: 一級河川　桐木川
+  :alternative_road: true
+  :road_division_cd: 1
+  :emergency_transport_road: false
+  :traffic_volume: 0
+  :occupied_property: true
+  :occupied_property_name: 水道
+  :construction_year: 1972
+  :bridge_length: 10.4
+  :bridge_width: 8.75
+  :number_of_piers: 0
+  :number_of_spans: 0
+  :number_of_griders: 0
+  :number_of_beams: 0
