@@ -3,20 +3,17 @@
 # Bluetoothキーボードで入力するとよいかも
 # ----
 
-# 初期設定
-cd #~
-
-echo パッケージを更新します
-echo 時々応答を求められることがあります
-echo その時は何も入力せず[Enter]を押して下さい
-pkg update -y
-
+# 初期化チェック
 if [ ! -d ~/storage ]; then # まだなら実施
-  echo Termuxの初期化を行います
-  echo ストレージへのアクセスを許可してください
-  termux-setup-storage
+  echo Termuxが初期化されていません
+  echo 以下のコマンドを入力してパッケージを最新化してください
+  echo "  pkg update -y"
+  echo 以下のコマンドを入力してストレージを初期化してください
+  echo "  termux-setup-storage"
+  exit 1
 fi
 
+cd #~
 # 環境設定
 
 echo Gitをインストールします
@@ -29,8 +26,9 @@ echo RubyとBundlerをインストールします
 echo 成功するとバージョンを表示します
 pkg list-all | grep ruby # これやると成功率が上がる？
 pkg install ruby -y # 失敗することあり（もう一度試す
+ruby -v;
 gem install bundler
-ruby -v; bundle -v
+bundle -v
 
 echo Vimをインストールします
 echo 成功するとバージョンを表示します
