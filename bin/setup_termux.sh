@@ -38,7 +38,7 @@ vim --version
 
 # アプリインストール#TODO git URL修正
 echo KyoRyoJoeをインストールします
-git https://github.com/kyoryojoe/app.git kyoryojoe
+git clone https://github.com/kyoryojoe/app.git kyoryojoe
 cd kyoryojoe/
 bundle install
 
