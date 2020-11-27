@@ -16,15 +16,20 @@ Windows・Mac・Linuxで同じ手順で構築できます。
 ------------------------
 
 1. gitHubからソースコードを`clone`する
-   * https://github.com/kyoryojoe/app.git kyoryojoe
+   * git clone https://github.com/kyoryojoe/app.git kyoryojoe
 1. インストール
    * `cd kyoryojoe/`
    * `bundle install`
 1. 実行（関連ディレクトリ作成など）
    * `bundle exec ruby app.rb`
    * `http://localhost:4567/`にアクセスすると「リポジトリがありません」と表示されている
-   * `public`ディレクトリの下に`inspects/repositories`が作成されている
-1. GitHub上に巡目データリポジトリを作成する
-   * TODO: 作り方を書く
-   * TODO: Toolから同期するやり方
+
+その後の操作
+------------
+
+1. GitHub上に巡目点検データリポジトリを作成する
+   * TODO: →使い方にリンクする
+1. 巡目点検データを配置する
+   * TODO: →使い方にリンクする
+
 

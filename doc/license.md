@@ -11,7 +11,6 @@ https://ja.wikipedia.org/wiki/GNU_General_Public_License)
 ----
 
 Kyo-Ryo-JoeにGPL v3ライセンスを適用する理由は。。あまりないです。
-橋梁の直営点検の作業負担を軽減すること以外、特に重視していません。
 なので将来的には別のライセンスを適用するかもしれないです。
 
 その他の負担
