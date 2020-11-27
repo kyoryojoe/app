@@ -39,14 +39,13 @@ pkg install vim -y # 失敗することあり（もう一度試す
 vim --version
 
 # アプリインストール#TODO git URL修正
-echo kyo-ryo-joeをインストールします
-git clone https://github.com/yamahei/kyo-ryo-joe.git
-cd kyo-ryo-joe/
+echo KyoRyoJoeをインストールします
+git https://github.com/kyoryojoe/app.git kyoryojoe
+cd kyoryojoe/
 bundle install
 
-echo kyo-ryo-joeをインストールしました
 echo セットアップが完了しました
-echo kyo-ryo-joe起動します
+echo KyoRyoJoe起動します
 echo ブラウザで以下のURLにアクセスしてください
 echo http://localhost:4567/
 

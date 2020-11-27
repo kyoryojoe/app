@@ -12,22 +12,19 @@ Windows・Mac・Linuxで同じ手順で構築できます。
 
 あと、データ格納用にGitHubアカウントが必要
 
-
 ソースコードの取得と実行
 ------------------------
 
 1. gitHubからソースコードを`clone`する
-   * https://github.com/yamahei/kyo-ryo-joe.git
+   * https://github.com/kyoryojoe/app.git kyoryojoe
 1. インストール
+   * `cd kyoryojoe/`
    * `bundle install`
 1. 実行（関連ディレクトリ作成など）
    * `bundle exec ruby app.rb`
    * `http://localhost:4567/`にアクセスすると「リポジトリがありません」と表示されている
-   * `public`ディレクトリの下に`inspects/repositories`が作成されている(`//kyo-ryo-joe/public/inspects/repositories`)
+   * `public`ディレクトリの下に`inspects/repositories`が作成されている
 1. GitHub上に巡目データリポジトリを作成する
-   * 1巡目ごとに1ディレクトリ
-   * `public/inspects/repositories`配下に`clone`する
-     * `clone`する際のディレクトリ名は「junme1」（1は任意の巡目）
-     * 「junme1」（1は任意の巡目）直下に「bridges.yaml」が必要
-       * ⇒[サンプルファイル](bridges.yaml)
-   * `http://localhost:4567/`にアクセスすると「1巡目」（1は任意の巡目）のリンクが表示されている
+   * TODO: 作り方を書く
+   * TODO: Toolから同期するやり方
+
