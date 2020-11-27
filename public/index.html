@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kyo-Ryo Joe</title>
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/inspect.css" />
+</head>
+
+
+<body>
+
+<!-- 
+    Components
+-->
+<script type="text/x-template" id="CATEGORY_BOX_TEMPLATE">
+    <div ui="category-box" class="is-clearfix">
+        <div ui="category-box-name">
+            <p class="is-clearfix">{{ name }}</p>
+        </div>
+        <div ui="category-box-items">
+            <slot></slot>
+        </div>
+    </div>
+</script>
+<script type="text/x-template" id="CATEGORY_ITEM_TEMPLATE">
+    <div ui="category-box-item" class="is-pulled-left">
+        <div ui="category-item-title">
+            <p>{{ title }}</p>
+        </div>
+        <div ui="category-item-content">
+            <slot></slot><br/>
+        </div>
+    </div>
+</script>
+
+<!-- 
+    Pages
+-->
+<script type="text/x-template" id="WORK_PAGE_TEMPLATE">
+    <div ui="page">
+
+        <div class="tile is-ancestor">
+            <div class="tile is-parent"><div class="tile is-child box"><p class="title">
+                <h1 class="title">業務選択</h1>
+                <p class="content" v-if="repositories.length == 0">
+                    リポジトリがありません。<br />
+                </p>
+                <p class="content" v-else>
+                    <ul>
+                        <li v-for="repository in sorted_repositories">
+                            <a :href="get_bridges_url(repository.junme)">
+                                {{ repository.junme | n2_junme_short }}
+                            </a>
+                            <span v-if="repository.need_sync">[同期してください]</span>
+                        </li>
+                    </ul>
+                </p>
+            </p></div></div>
+            <div class="tile is-parent"><div class="tile is-child box">
+
+                <h1 class="title">ツール</h1>
+
+                <div class="content">
+                    <h2 class="subtitle">橋梁</h2>
+                    <ol>
+                        <li>
+                            <a href="/bridges_header.csv" target="_blank">
+                                <span class="icon is-medium"><i class="fa fa-table"></i></span>
+                                <span>CSVデータ（ヘッダのみ）ダウンロード</span>
+                            </a>
+                        </li>
+                        <li>
+                            <label>
+                                <span class="icon is-medium"><i class="fa fa-print"></i></span>
+                                <span>変換（CSV → YAML）</span>
+                                <input type="file" accept=".csv" style="display: none;" />
+                            </label>
+                        </li>
+                    </ol>
+    
+                    <h2 class="subtitle">データ</h2>
+                    <ul>
+                        <li>
+                            <span class="icon is-medium"><i class="fa fa-refresh"></i></span>
+                            <span>点検データ同期</span>
+                        </li>
+                        <li>
+                            <span class="icon is-medium"><i class="fa fa-cloud-download"></i></span>
+                            <span>巡目リポジトリ配置</span>
+                        </li>
+                        <li>
+                            <span class="icon is-medium"><i class="fa fa-trash"></i></span>
+                            <span>巡目リポジトリ削除</span>
+                        </li>
+                    </ul>
+    
+                </div>
+
+            </div></div>
+        </div>
+
+        <!-- <popup :visible="visible">
+            <p>
+                巡目ごとの点検データ（リポジトリ）URLを指定して配置します。<br/>
+                認証情報が費用な場合、ユーザID、パスワードも入力してください。
+            </p>
+            <p>
+                <input class="input is-fullwidth" type="text" v-model="repository.url" placeholder="URL" />
+                <input class="input" type="number" v-model="repository.junme" placeholder="巡目（半自動）"/>
+                <input class="input" type="text" v-model="repository.id" placeholder="ユーザID（任意）"/>
+                <input class="input" type="text" v-model="repository.pwd" placeholder="パスワード（任意）"/>
+            </p>
+            <p style="text-align: right;">
+                <button class="button" @click="click_cancel">Cancel</button>
+                <button class="button is-primary" @click="click_ok">OK</button>
+            </p>
+        </popup> -->
+
+
+    </div>
+</script>
+
+<script type="text/x-template" id="LIST_PAGE_TEMPLATE">
+    <div ui="page">
+        <h1 class="title">
+            <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
+            橋一覧
+        </h1>
+        TODO: フィルタ
+
+        <div class="columns" v-for="column in columns">
+
+            <div class="column is-3" v-for="bridge in column">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-1by1 bg_640x480">
+                            <img :src="bridge.inspects | inspects_from_outline_image | url_to_no_cache" alt="">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <p class="has-text-grey">{{ bridge.bridge_length }} m</p>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4" :title="bridge.name_yomi" style="overflow: hidden;">
+                                    {{ bridge.bridge_name }}
+                                </p>
+                            </div>
+                            <div class="media-right">
+                                <maru-button :icon="`fa-chevron-right`" @click="on_bridge_selected(bridge)"></maru-button>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="field is-grouped is-grouped-multiline">
+                                <div class="control">
+                                    <p class="subtitle is-6" :title="bridge.address_yomi">
+                                        {{ bridge.address }}
+                                    </p>
+                                </div>
+                                <div class="control">
+                                    <div class="tags has-addons" style="">
+                                        <span class="tag">今回</span>
+                                        <span class="tag is-primary" v-if="bridge.ui.status.now.has_inspect">
+                                            {{ bridge.ui.status.now.judge_kbn | n2_judge_kbn }}
+                                        </span>
+                                        <span class="tag">{{ bridge.ui.status.now.status }}</span>
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <div class="tags has-addons">
+                                        <span class="tag">前回</span>
+                                        <span class="tag is-warning" v-if="bridge.ui.status.pre.has_inspect">
+                                            {{ bridge.ui.status.pre.judge_kbn | n2_judge_kbn }}
+                                        </span>
+                                        <span class="tag">{{ bridge.ui.status.pre.status }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+            
+        </div>
+        
+    </div>
+</script>
+
+<script type="text/x-template" id="BRIDGE_PAGE_TEMPLATE">
+    <div ui="page" class="mb-4">
+        <h1 class="title">
+            <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
+            {{ bridge.bridge_name }}
+        </h1>
+        <category-box :name="'基本情報'">
+            <category-box-item :title="'橋梁名'">
+                <ruby>{{ bridge.bridge_name }}<rt>{{ bridge.bridge_name_kana }}</rt></ruby>
+            </category-box-item>
+            <category-box-item :title="'所在地'">
+                <ruby>{{ bridge.address }}<rt>{{ bridge.address_kana }}</rt></ruby>
+            </category-box-item>
+            <category-box-item :title="'起点位置（緯度）'">
+                {{ bridge.location_latitude | n2_dfb }}
+            </category-box-item>
+            <category-box-item :title="'起点位置（経度）'">
+                {{ bridge.location_longitude | n2_dfb }}
+            </category-box-item>
+            <category-box-item :title="'Google Maps'" v-if="bridge.location_latitude && bridge.location_longitude">
+                <a :href="get_googlemaps_link(bridge.location_latitude, bridge.location_longitude)" target="_blank">
+                    <span>地図を開く</span>
+                    <span class="icon is-medium">
+                        <i class="fa fa-external-link"></i>
+                    </span>
+                </a>
+            </category-box-item>
+        </category-box>
+        <figure class="image is-1by1 bg_640x480">
+            <img :src="bridge.inspects | inspects_from_outline_image | url_to_no_cache" alt="" />
+        </figure>
+
+        <category-box :name="'点検状況'">
+            <category-box-item :title="inspect.junme | n2_junme_short" :key="inspect.inspect_cd" v-for="inspect in inspects">
+                <div class="media" style="width: 100%;">
+                    <template v-if="inspect.inspect_cd && inspect.date">
+                        <div class="media-left">{{ inspect.judge_kbn | n2_judge_kbn }}</div>
+                        <div class="media-content">{{ inspect.date | date_ymd }}</div>
+                    </template>
+                    <template v-if="inspect.inspect_cd && !inspect.date">
+                        <div class="media-content">点検中</div>
+                    </template>
+                    <template v-if="!inspect.inspect_cd && !inspect.date">
+                        <div class="media-content">開始</div>
+                    </template>
+                    <div class="media-right">
+                        <maru-button :icon="`fa-chevron-right`" @click="on_inspect_selected(inspect)"></maru-button>
+                    </div>
+                </div>
+            </category-box-item>
+        </category-box>
+
+        <category-box :name="'周辺環境'">
+            <category-box-item :title="'路線名'">{{ bridge.route_name }}</category-box-item>
+            <category-box-item :title="'路下条件'">{{ bridge.road_condition }}</category-box-item>
+            <category-box-item :title="'代替路の有無'">{{ bridge.alternative_road | f2_umu }}</category-box-item>
+            <category-box-item :title="'道路区分'">{{ bridge.road_division_cd | n2_road_type }}</category-box-item>
+            <category-box-item :title="'緊急輸送道路'">{{ bridge.emergency_transport_road | f2_ox }}</category-box-item>
+            <category-box-item :title="'交通量'">{{ bridge.traffic_volume }}</category-box-item>
+            <category-box-item :title="'占有物件'" v-if="bridge.occupied_property">{{ bridge.occupied_property_name }}</category-box-item>
+            <category-box-item :title="'占有物件'" v-else>{{ bridge.occupied_property | f2_umu }}</category-box-item>
+        </category-box>
+        <category-box :name="'橋梁仕様'">
+            <category-box-item :title="'設置年次'">{{ bridge.construction_year | n2_y }}</category-box-item>
+            <category-box-item :title="'橋長'">{{ bridge.bridge_length | n2_m }}</category-box-item>
+            <category-box-item :title="'幅員'">{{ bridge.bridge_width | n2_m }}</category-box-item>
+            <category-box-item :title="'荷重制限'">{{ bridge.load_limit | n2_kg }}</category-box-item>
+            <category-box-item :title="'橋脚数'">{{ bridge.number_of_piers }}</category-box-item>
+            <category-box-item :title="'径間数'">{{ bridge.number_of_spans }}</category-box-item>
+            <category-box-item :title="'主桁数'">{{ bridge.number_of_griders }}</category-box-item>
+            <category-box-item :title="'横桁数'">{{ bridge.number_of_beams }}</category-box-item>
+            <!-- <category-box-item :title="'付帯設備'">TODO: </category-box-item> -->
+
+        </category-box>
+    </div>
+</script>
+
+<script type="text/x-template" id="INSPECT_PAGE_TEMPLATE">
+    <div ui="page">
+        <h1 class="title">
+            <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
+            {{ bridge.bridge_name }} : {{ header.judge_kbn | n2_judge_kbn}}
+        </h1>
+        <h2 ui="page_header" class="mb-2" v-if="ui.render_outline">
+            <p>
+                <span v-if="header.finished">{{ header.finished | date_ymd }}</span>
+                <span v-else>新規点検</span>
+                <a v-if="latest_url" :href="latest_url" target="_blank">
+                    <span>前回</span>
+                    <span class="icon is-medium">
+                        <i class="fa fa-external-link"></i>
+                    </span>
+                </a>
+            </p>
+            <p>
+                <button class="button" @click="finish_inspect">
+                    <span class="icon is-medium">
+                        <i v-if="header.finished" class="fa fa-refresh"></i>
+                        <i v-else class="fa fa-check"></i>
+                    </span>
+                    <span v-if="header.finished">点検修正</span>
+                    <span v-else>点検完了</span>
+                </button>
+            </p>
+        </h2>
+        
+        <figure class="image is-1by1 bg_640x480 mb-4" v-if="ui.render_outline">
+            <img :src="outline.image | url_to_no_cache" alt="" />
+            <p class="box_in_figure_tl">
+                <span class="text_shadow">
+                    橋梁 全景
+                    <new-tab-link :href="outline.image"></new-tab-link>
+                </span>
+            </p>
+            <p class="box_in_figure_tr">
+                <camera @captured="on_outline_captured"></camera>
+            </p>
+            <p class="box_in_figure_bl">
+                <span class="text_shadow_scroll" v-if="outline.memo">{{ outline.memo }}</span><br />
+                <memo :obj="outline" :attr="'memo'" @change="save_and_rerender_outline(null)"></memo>
+            </p>
+        </figure>
+
+        <!-- Group -->
+        <div class="columns mb-6">
+            <article class="column is-3 message is-white" v-for="group in groups" v-if="group.parts.length">
+                <div class="message-header" @click="toggle_group_open(group)">
+                    <div ui="group_headeer">
+                        <p>{{ group.name }}</p>
+                        <p>{{ get_group_judge_kbn(group) | n2_judge_kbn}}</p>
+                    </div>
+                    <maru-button :icon="`fa-chevron-down`" v-if="group.ui.open"></maru-button>
+                    <maru-button :icon="`fa-chevron-right`" v-if="!group.ui.open"></maru-button>
+                </div>
+    
+                <!-- Part -->
+                <div class="message-body" style="padding: 0; border-width: 0;" v-for="part in group.parts" v-if="group.ui.open && group.ui.render">
+
+                    <article class="message is-white">
+                        <div class="message-header" @click="toggle_part_open(group, part)">
+                            <div ui="part_headeer">
+                                <p>{{ part.name }}#{{ part.seq }}</p>
+                                <p>{{ get_part_judge_kbn(part) | n2_judge_kbn }}</p>
+                            </div>
+                            <maru-button :icon="`fa-chevron-down`" v-if="part.ui.open"></maru-button>
+                            <maru-button :icon="`fa-chevron-right`" v-if="!part.ui.open"></maru-button>
+                        </div>
+
+                        <div class="message-body" style="padding: 0;" v-if="part.ui.open && part.ui.render">
+
+                            <figure class="image is-1by1 bg_640x480 mb-4">
+                                <img :src="part.image | url_to_no_cache" alt="" />
+                                <children-map v-if="part.ui.map" :children="part.checks" :kbn_func="get_check_judge_kbn"></children-map>
+                                <p class="box_in_figure_tl">
+                                    <span class="text_shadow">
+                                        {{ part.name }} 全景
+                                        <new-tab-link :href="part.image"></new-tab-link>
+                                    </span>
+                                </p>
+                                <p class="box_in_figure_tr">
+                                    <camera @captured="on_part_captured($event, group, part)"></camera>
+                                </p>
+                                <p class="box_in_figure_bl"><!-- v-if="part.image" -->
+                                    <span class="text_shadow_scroll" v-if="part.memo">{{ part.memo }}</span><br />
+                                    <memo :obj="part" :attr="'memo'" @change="save_and_rerender_part(group, part, null)"></memo>
+                                </p>
+                                <p class="box_in_figure_br" v-if="part.image">
+                                    <a class="button is-primary" @click="on_goto_check_click(part)">
+                                        <span class="icon is-medium"><i class="fa fa-search"></i></span>
+                                        <span>点検する</span>
+                                    </a>
+                                </p>
+                            </figure>
+
+                        </div>
+
+                    </article>
+                </div>
+        
+            </article>
+        </div>
+
+        <div class="mb-4">
+            <button class="button is-fullwidth" @click="on_click_addmember">
+                <span class="icon"><i class="fa fa-search-plus"></i></span>
+                <span>点検部材を追加する</span>
+            </button>
+        </div>
+        <popup :visible="ui.members.visible">
+            <p>
+                <div class="select">
+                    <select v-model="ui.members.member">
+                        <option :value="null">（選択してください）</option>
+                        <optgroup :label="group.name" v-for="group in ui.members.groups">
+                            <option :value="member" v-for="member in group.members">
+                                <template v-if="member.name">
+                                    {{ member.name }}
+                                </template>
+                                <template v-else>
+                                    その他の{{ group.name }}（入力）
+                                </template>
+                            </option>
+                        </optgroup>
+                    </select>
+                </div>
+            </p>
+            <p v-if="ui.members.member && !ui.members.member.name">
+                <input class="input" type="text" placeholder="部材名" v-model="ui.members.name">
+            </p>
+            <p style="text-align: right;">
+                <button class="button" @click="click_members_cancel">Cancel</button>
+                <button class="button is-primary" @click="click_members_ok">OK</button>
+            </p>
+
+        </popup>
+
+    </div>
+</script>
+
+<script type="text/x-template" id="CHECK_PAGE_TEMPLATE">
+    <div ui="page">
+        <h1 class="title">
+            <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
+            {{ inspect.name }}#{{ inspect.seq }} - {{ bridge.bridge_name }}
+        </h1>
+        <figure class="image is-1by1 bg_640x480 mb-4" v-if="ui.render_inspect">
+            <img :src="inspect.image | url_to_no_cache" alt="" />
+            <children-map :children="inspect.checks" :kbn_func="get_check_judge_kbn"></children-map>
+            <!-- TODO: mapping -->
+            <p class="box_in_figure_tl">
+                <span class="text_shadow">
+                    {{ inspect.name }} 全景
+                    <new-tab-link :href="inspect.image"></new-tab-link>
+                </span>
+            </p>
+            <p class="box_in_figure_bl">
+                <span class="text_shadow_scroll" v-if="inspect.memo">{{ inspect.memo }}</span><br />
+                <memo :obj="inspect" :attr="'memo'" @change="save_and_rerender_inspect()"></memo>
+            </p>
+        </figure>
+        <div>
+            <button class="button is-fullwidth" @click="on_append_check">
+                <span class="icon"><i class="fa fa-search-plus"></i></span>
+                <span>点検個所を追加する</span>
+            </button>
+        </div>
+
+        <div v-for="check in check_list" class="columns">
+            <div class="column is-3">
+                <article class="message is-white">
+                    <div class="message-header" @click="toggle_check_open(check)">
+                        <div ui="check_headeer">
+                            <p>
+                                <span class="icon is-small"><i class="fa fa-search"></i></span>
+                                点検 #{{ check.seq }}
+                            </p>
+                            <p>{{ get_check_judge_kbn(check) | n2_judge_kbn}}</p>
+                        </div>
+                        <maru-button :icon="`fa-chevron-down`" v-if="check.ui.open"></maru-button>
+                        <maru-button :icon="`fa-chevron-right`" v-if="!check.ui.open"></maru-button>
+                    </div>
+
+                    <!-- TODO: アニメーションしないのはなぜ？ -->
+                    <transition name="fade" v-if="check.ui.open && check.ui.render">
+                        <div class="message-body" style="padding: 0;">
+
+                            <figure class="image is-1by1 bg_640x480 mb-4">
+                                <img :src="check.image | url_to_no_cache" />
+                                <children-map :children="check.damages" :kbn_func="get_damage_judge_kbn"></children-map>
+                                <p class="box_in_figure_tl">
+                                    <span class="text_shadow">
+                                        点検写真
+                                        <new-tab-link :href="check.image"></new-tab-link>
+                                    </span>
+                                </p>
+                                <p class="box_in_figure_tr">
+                                    <a class="button" v-if="check.image" @click="on_remap_check(check)">
+                                        <span class="icon is-medium"><i class="fa fa-crosshairs"></i></span>
+                                    </a>
+                                </p>
+                                <p class="box_in_figure_bl" v-if="check.image">
+                                    <span class="text_shadow_scroll" v-if="check.memo">{{ check.memo }}</span><br />
+                                    <memo :obj="check" :attr="'memo'" @change="save_and_rerender_check(check, null)"></memo>
+                                </p>
+                                <!-- <p class="box_in_figure_br"></p> -->
+                            </figure>
+                            <div>
+                                <button class="button is-fullwidth" v-if="check.image" @click="on_append_damage(check)">
+                                    <span class="icon"><i class="fa fa-hand-o-right"></i></span>
+                                    <span>損傷個所を追加する</span>
+                                </button>
+                            </div>
+                    
+                            <div ui="check_thumbs">
+                                <!-- TODO -->
+                            </div>
+
+                            <div v-for="damage in get_reversed_damages(check)">
+                                <article class="message is-white">
+                                    <div class="message-header" @click="toggle_damage_open(damage)">
+                                        <div ui="damage_headeer">
+                                            <p>
+                                                <span class="icon is-small"><i class="fa fa-heartbeat"></i></span>
+                                                損傷 #{{ damage.seq }}
+                                                （点検 #{{ check.seq }}）
+                                            </p>
+                                            <p>{{ damage.judge_kbn | n2_judge_kbn}}</p>
+                                        </div>
+                                        <maru-button :icon="`fa-chevron-down`" v-if="damage.ui.open"></maru-button>
+                                        <maru-button :icon="`fa-chevron-right`" v-if="!damage.ui.open"></maru-button>
+                                    </div>
+                    
+                                    <div class="message-body" style="padding: 0;" v-if="damage.ui.open && damage.ui.render">
+                
+                                        <figure class="image is-1by1 bg_640x480 mb-4">
+                                            <img :src="damage.image | url_to_no_cache" alt="" />
+                                            <p class="box_in_figure_tl">
+                                                <span class="text_shadow">
+                                                    損傷写真
+                                                    <new-tab-link :href="damage.image"></new-tab-link>
+                                                </span>
+                                            </p>
+                                            <p class="box_in_figure_tr">
+                                                <a class="button" v-if="damage.image" @click="on_remap_damage(check, damage)">
+                                                    <span class="icon is-medium"><i class="fa fa-crosshairs"></i></span>
+                                                </a>
+                                            </p>
+                                            <p class="box_in_figure_bl" v-if="damage.image">
+                                                <span class="text_shadow_scroll" v-if="damage.memo">{{ damage.memo }}</span><br />
+                                                <!-- <memo :obj="damage" :attr="'memo'" @change="save_and_rerender_damage(check, damage, null)"></memo> -->
+                                                <a class="button" @click="on_judge(check, damage)">
+                                                    <span class="icon is-medium"><i class="fa fa-clipboard"></i></span>
+                                                </a>
+                                                
+                                            </p>
+                                            <!-- <p class="box_in_figure_br"></p> -->
+                                        </figure>
+                                
+                                        <div ui="check_thumbs">
+                                            <!-- TODO -->
+                                        </div>
+                
+                                    </div>
+                    
+                                </article>
+                    
+                            </div>
+                    
+
+                        </div>
+                    </transition>
+
+                </article>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="XXX_PAGE_TEMPLATE">
+    <div ui="page">
+        <h1 class="title">{{ page_title }}</h1>
+    </div>
+</script>
+
+
+
+<!--
+    App
+ -->
+<div id="app">
+
+    <nav id="header">
+        <div id="header-left">
+            <a href="/">
+                <!-- https://my.logogarden.com/ -->
+                <img src="img/logo.svg">
+            </a>
+        </div>
+        <div id="header-right">
+            <span>{{page_junme | n2_junme_long}}</span>
+        </div>
+    </nav>
+
+    <section id="pages" class="_section">
+        <div class="container is-fluid">
+            <transition name="fade">
+                <router-view
+                    @page_junme="on_page_junme"
+                    @back_select="on_back"
+                    @junme_select="on_junme_select"
+                    @bridge_select="on_bridge_select"
+                    @inspect_select="on_inspect_select"
+                    @check_select="on_check_select"
+                ></router-view>    
+            </transition>
+        </div>
+    </section>
+    <section id="footer" class="mt-4 mb-4">
+        <p style="text-align: center;">
+            Kyo Ryo Joe &copy; 2020 yamahei
+        </p>
+    </section>
+
+    <loader :visible="loader_visible"></loader>
+    <modal></modal>
+    <mapping></mapping>
+    <judge></judge>
+</div>
+
+ <!--
+    Include
+ -->
+ <div>
+    <script src="js/const.js"></script>
+
+    <script src="js/dateformat.js"></script>
+    <script src="js/util.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha512-VGxuOMLdTe8EmBucQ5vYNoYDTGijqUsStF6eM7P3vA/cM1pqOwSBv/uxw94PhhJJn795NlOeKBkECQZ1gIzp6A==" crossorigin="anonymous"></script>
+    <script src="js/api.js"></script>
+    <script src="js/biz.js"></script>
+
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.3.4/dist/vue-router.js"></script>
+    <script src="js/vue-filter.js"></script>
+    <!-- <script src="js/components/v-scroll.js"></script> -->
+    <script src="js/components/loader.js"></script>
+    <script src="js/components/popup.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/components/judge.js"></script>
+    <script src="js/components/camera.js"></script>
+    <script src="js/components/memo.js"></script>
+    <script src="js/components/maru-button.js"></script>
+    <script src="js/components/mapping.js"></script>
+    <script src="js/components/category-box-item.js"></script>
+    <script src="js/components/new-tab-link.js"></script>
+    <script src="js/components/children-map.js"></script>
+    <script src="js/pages/inspect/vue-page-work.js"></script>
+    <script src="js/pages/inspect/vue-page-list.js"></script>
+    <script src="js/pages/inspect/vue-page-bridge.js"></script>
+    <script src="js/pages/inspect/vue-page-inspect.js"></script>
+    <script src="js/pages/inspect/vue-page-check.js"></script>
+
+    <script src="js/app.js"></script>
+
+</div>
+</body>
+</html>

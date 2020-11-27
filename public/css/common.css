@@ -1,0 +1,63 @@
+/**
+    Scroll bar
+*/
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 3px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 3px;
+  box-shadow:0 0 0 1px rgba(255, 255, 255, .3);
+}
+
+
+/**
+    routing transition
+*/
+.fade-enter-active, .fade-leave-active {
+    transition-property: opacity;
+    transition-duration: .25s;
+}
+.fade-enter-active {
+    transition-delay: .25s;
+}
+.fade-enter, .fade-leave-active {
+    opacity: 0
+}
+
+/**
+    Page styles
+*/
+#pages {
+    margin-top: 1.5rem;
+}
+#header {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    margin: 0;
+    padding: 8px 12px;
+    height: 40px;
+}
+#header-left, #header-right {
+    display: table;
+    margin: 0;
+    padding: 0;
+    height: 40px;
+}
+#header-right {
+    text-align: right;
+}
+#header-left > *, #header-right > * {
+    display: table-cell;
+    vertical-align: middle;
+    max-height: 100%;
+}
+#header-left img {
+    height: 40px;
+}

@@ -1,0 +1,128 @@
+
+/**
+    Component styles
+*/
+/** Category box and item */
+*[ui='category-box'] {}
+*[ui='page'] > *[ui='category-box']:not(:first-child) {
+    margin-top: 2rem;
+}
+*[ui='category-box'] *[ui='category-box-name'] {
+    font-weight: bolder;
+    margin: 0.5rem 0 0.25rem 0;
+}
+*[ui='category-box'] *[ui='category-box-items'] {}
+
+*[ui='category-box-item'] {
+    margin-right: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+*[ui='category-box-item'] *[ui='category-item-title']{
+    font-size: 0.5rem;
+    border-bottom: solid 1px silver;
+}
+*[ui='category-box-item'] *[ui='category-item-content']{
+    padding: 0.25rem 0.5rem;
+}
+
+
+/** Image in Figure */
+figure.bg_640x480 {
+    background-color: silver;
+    /* background-image: url("/img/640x480.png"); */
+    background-size: cover;
+}
+@media screen and (max-width: 768px) {
+    figure.bg_640x480 {
+        margin: 0 -32px;
+    }
+}
+figure.bg_640x480 > img{
+    object-fit: contain;
+}
+
+.box_in_figure_tl { position: absolute; margin: 1rem; left:  0; top:    0; }
+.box_in_figure_tr { position: absolute; margin: 1rem; right: 0; top:    0; }
+.box_in_figure_bl { position: absolute; margin: 1rem; left:  0; bottom: 0; }
+.box_in_figure_br { position: absolute; margin: 1rem; right: 0; bottom: 0; }
+
+.text_shadow, .text_shadow_scroll {
+    /* text-shadow: 0px 0px 2px white;
+    text-stroke: 1px white;
+    -webkit-text-stroke: 1px white;*/
+    display: inline-block;
+    border-radius: 0.25rem;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.5rem;
+}
+.text_shadow_scroll {
+    max-height: 10vw;/* TODO: media query */
+    overflow: auto;
+}
+
+/** Layout of Group and Part */
+*[ui='page_header']{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 8rem;
+    font-size: 1.25rem;
+}
+*[ui='group_headeer']{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: gray;
+}
+*[ui='part_headeer'] {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+*[ui='check_headeer'] {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+*[ui='damage_headeer'] {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/** mapping panel */
+*[ui='mapping_panel']{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: table-cell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 40;/* header is 30 */
+}
+
+/* 
+    Pointer color animation
+        TODO: add style for pointer elemnt below
+            animation: point-color 1s infinite;
+            -webkit-animation: point-color 1s infinite;
+*/
+@keyframes point-color {
+    0% { color: white; }
+  100% { color: red; }
+}
+@-webkit-keyframes point-color {
+    0% { color: white; }
+  100% { color: red; }
+}
