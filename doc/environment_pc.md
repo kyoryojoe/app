@@ -20,9 +20,9 @@ Windows・Mac・Linuxで同じ手順で構築できます。
 1. インストール
    * `cd kyoryojoe/`
    * `bundle install`
-1. 実行（関連ディレクトリ作成など）
+1. 実行（起動）
    * `bundle exec ruby app.rb`
-   * `http://localhost:4567/`にアクセスすると「リポジトリがありません」と表示されている
+   * ブラウザから`http://localhost:4567/`にアクセスする
 
 その後の操作
 ------------
