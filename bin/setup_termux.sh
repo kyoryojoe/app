@@ -48,11 +48,11 @@ if [ ! -f ~/.bashrc ]; then # まだなら実施
   echo '#! $PREFIX/bin/bash' >>  ~/.bashrc
   chmod +x ~/.bashrc
 fi
-echo '#KyoRyoJoe start' > ~/.bashrc
-echo 'cd ~/kyoryojoe/' > ~/.bashrc
-echo 'bundle exec ruby app.rb &' > ~/.bashrc
-echo 'echo KyoRyoJoeが起動しました' > ~/.bashrc
-echo 'cd -' > ~/.bashrc
+echo '#KyoRyoJoe start' >> ~/.bashrc
+echo 'cd ~/kyoryojoe/' >> ~/.bashrc
+echo 'bundle exec ruby app.rb &' >> ~/.bashrc
+echo 'echo KyoRyoJoeが起動しました' >> ~/.bashrc
+echo 'cd -' >> ~/.bashrc
 
 
 echo セットアップが完了しました
