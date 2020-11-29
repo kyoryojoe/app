@@ -13,8 +13,8 @@ if [ ! -d ~/storage ]; then # まだなら実施
   exit 1
 fi
 
-cd #~
 # 環境設定
+cd #~
 
 echo Gitをインストールします
 echo 成功するとバージョンを表示します
@@ -36,7 +36,7 @@ pkg list-all | grep vim # これやると成功率が上がる？
 pkg install vim -y # 失敗することあり（もう一度試す
 vim --version
 
-# アプリインストール#TODO git URL修正
+# アプリインストール
 echo KyoRyoJoeをインストールします
 git clone https://github.com/kyoryojoe/app.git kyoryojoe
 cd kyoryojoe/
@@ -54,7 +54,6 @@ echo 'bundle exec ruby app.rb &' >> ~/.bashrc
 echo 'echo KyoRyoJoeが起動しました' >> ~/.bashrc
 echo 'cd -' >> ~/.bashrc
 
-
+# おわり
 echo セットアップが完了しました
 echo Termuxを再起動してください
-
