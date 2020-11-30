@@ -20,6 +20,7 @@ end
 class MyApp < Sinatra::Base
 
     GIT_FORMAT = /^https?:\/\/.*\.git$/
+    MAIL_FORMAT = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     UUID_FORMAT = /^[0-9a-zA-Z\-]{36}$/
     HEX8_FORMAT = /^[0-9a-zA-Z]{16}$/
     DATE_FORMAT = /^\d{4}-\d{2}-\d{2}$/
@@ -83,6 +84,17 @@ class MyApp < Sinatra::Base
     #########
     URL_FOR_TOOLS = "/api/tools"
     namespace URL_FOR_TOOLS do
+        put '/clone/:junme' do
+            validates{ params{
+                required(:junme).filled(:integer)
+                required(:url).filled(:string, format?: GIT_FORMAT)
+                optional(:mailaddress).maybe(:string, format?: MAIL_FORMAT)
+                optional(:password).maybe(:string)
+            }}
+            junme_dir = inspect.junme_to_dirpath(params[:junme].to_i)
+            tools.clone(junme_dir, params[:url], params[:mailaddress], params[:password])
+            200
+        end
         
     end
 

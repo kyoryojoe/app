@@ -4,11 +4,11 @@
 
     const component = {
         template: `
-            <template>
+            <div>
                 <div v-for="child in children" :style="get_childstyle(child)">
-                    #{{ child.seq }}
+                    <span>#{{ child.seq }}</span>
                 </div>
-            </template>
+            </div>
         `,
         props: ["children", "kbn_func"],
         data: function(){
@@ -41,7 +41,7 @@
                     "border-color": `rgba(${color.r}, ${color.g}, 0, 0.5)`,
                     "background-color": `rgba(${color.r}, ${color.g}, 0, 0.25)`,
                     "color": `rgba(${color.r}, ${color.g}, 0, 1)`,
-                    "font-size": "xx-large",
+                    "font-size": "24px",
                     // "display": "table-cell",
                     // "vertical-align": "middle",
                     // "text-align": "center",

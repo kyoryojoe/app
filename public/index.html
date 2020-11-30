@@ -90,8 +90,10 @@
                             <span>点検データ同期</span>
                         </li>
                         <li>
-                            <span class="icon is-medium"><i class="fa fa-cloud-download"></i></span>
-                            <span>巡目リポジトリ配置</span>
+                            <p @click="on_git_clone_click">
+                                <span class="icon is-medium"><i class="fa fa-cloud-download"></i></span>
+                                <span>巡目リポジトリ配置</span>
+                            </p>
                         </li>
                         <li>
                             <span class="icon is-medium"><i class="fa fa-trash"></i></span>
@@ -104,23 +106,7 @@
             </div></div>
         </div>
 
-        <!-- <popup :visible="visible">
-            <p>
-                巡目ごとの点検データ（リポジトリ）URLを指定して配置します。<br/>
-                認証情報が費用な場合、ユーザID、パスワードも入力してください。
-            </p>
-            <p>
-                <input class="input is-fullwidth" type="text" v-model="repository.url" placeholder="URL" />
-                <input class="input" type="number" v-model="repository.junme" placeholder="巡目（半自動）"/>
-                <input class="input" type="text" v-model="repository.id" placeholder="ユーザID（任意）"/>
-                <input class="input" type="text" v-model="repository.pwd" placeholder="パスワード（任意）"/>
-            </p>
-            <p style="text-align: right;">
-                <button class="button" @click="click_cancel">Cancel</button>
-                <button class="button is-primary" @click="click_ok">OK</button>
-            </p>
-        </popup> -->
-
+        <git-clone :visible="clone.visible" @close="on_git_clone_close"></git-clone>
 
     </div>
 </script>
@@ -629,6 +615,7 @@
     <script src="js/components/category-box-item.js"></script>
     <script src="js/components/new-tab-link.js"></script>
     <script src="js/components/children-map.js"></script>
+    <script src="js/components/git-clone.js"></script>
     <script src="js/pages/inspect/vue-page-work.js"></script>
     <script src="js/pages/inspect/vue-page-list.js"></script>
     <script src="js/pages/inspect/vue-page-bridge.js"></script>

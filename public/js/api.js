@@ -36,6 +36,7 @@
 
     // const ADMIN_BASE_URI = "/api/admin";
     // const SYNC_BASE_URI = "/api/sync";
+    const TOOLS_BASE_URI = "/api/tools";
     const INSPECT_BASE_URI = "/api/inspect";
     const api = function(){};
 
@@ -49,6 +50,18 @@
         state.hook.end = end;
         state.hook.error = error;
     };
+
+    //Tool
+    api.prototype.git_clone = function(junme, _url, mailaddress, password){
+        const url = `${TOOLS_BASE_URI}/clone/${junme}`;
+        const params = {
+            url: _url,
+            mailaddress: mailaddress,
+            password: password,
+        };
+        return axios.put(url, params);
+    };
+
 
     //Inspect
     api.prototype.get_repositories = function(){

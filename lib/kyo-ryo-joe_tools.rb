@@ -8,6 +8,10 @@ module KyoRyoJoe
 
     class Tools
 
+        def clone(junme_dir, url, mailaddress, password)
+            auth_url = (mailaddress || password) ? GitUtil.get_auth_url(url, mailaddress, password) : url
+            GitUtil.clone(auth_url, junme_dir)
+        end
 
     end
 

@@ -37,6 +37,9 @@ module KyoRyoJoe
             raise "junme(#{junme}) must be number." if !junme.is_a?(Numeric)
             "#{INSPECT_DIRNAME_PREFIX}#{junme}"
         end
+        def junme_to_dirpath junme
+            File.join(@repo_root_dir, junme_to_dirname(junme))
+        end
         def dirpath_to_junme path
             raise "path(#{path}) is not exists." if !FileTest.exists?(path)
             raise "path(#{path}) is not directory." if !File.directory?(path)
