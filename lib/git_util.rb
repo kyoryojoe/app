@@ -7,7 +7,7 @@ module GitUtil
     def self.get_auth_url url, username=nil, password=nil
         auth = [
             URI.encode_www_form_component(username),
-            (name && pass) ? ':' : '',
+            (username && password) ? ':' : '',
             URI.encode_www_form_component(password),
         ].join("");
         if auth.empty? || url.match(/@/)

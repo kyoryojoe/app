@@ -79,7 +79,7 @@ const work_page = g.work_page = {
                 const mailaddress = $event.mailaddress;
                 const password = $event.password;
                 g.API.git_clone(junme, url, mailaddress, password).then(function(response){
-                    /////////TODO: clone
+                    g.location.reload();
                 });
             }else{
                 callback();

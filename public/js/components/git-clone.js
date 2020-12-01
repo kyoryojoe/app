@@ -23,8 +23,6 @@
                         <input class="input is-fullwidth" type="text" v-model="url" placeholder="URL" />
                     </p>
                 </div>
-
-                <p>以下は認証情報が必要な場合のみ入力してください。（GitHubプライベートリポジトリの場合）</p>
                 <div class="field is-grouped">
                     <p class="control is-expanded">
                         <input class="input" type="text" v-model="mailaddress" placeholder="ユーザID（任意）"/>
@@ -65,7 +63,7 @@
                 if(params.junme * 1 <= 0){ return; }
                 if(!params.url){ return; }
                 if(!params.url.match(/^https?:.+\.git$/)){ return; }
-                if(!!params.mailaddress ^ !!params.password){ return; }//片方だけ入力はNG
+                if(!params.mailaddress || !params.password){ return; }//必須（push時に必須）
                 if(params.mailaddress && !params.mailaddress.match(/.+@.+/)){ return; }
                 this.$emit("close", params);
             },
