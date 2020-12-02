@@ -60,30 +60,48 @@ const work_page = g.work_page = {
         on_git_clone_close: function($event){
             const self = this;
             this.clone.visible = false;
-            if($event){
-                const junme = $event.junme * 1;
-                if(this.repositories.length > 0){
-                    const junmes = this.repositories.map(function(repository){
-                        return repository.junme * 1;
+            if(!$event){ return; }
+
+            const junme = $event.junme * 1;
+            const url = $event.url;
+            const mailaddress = $event.mailaddress;
+            const password = $event.password;
+            if(!junme || !url || !mailaddress || !password){ return; }
+            if(this.repositories.length > 0){
+                const junmes = this.repositories.map(function(repository){
+                    return repository.junme * 1;
+                });
+                const high_junme = Math.max(...junmes) + 1;
+                const low_junme = Math.min(...junmes) - 1;
+                if(high_junme != junme && low_junme != junme){
+                    g.Modal.alert({
+                        message: `指定できる巡目は配置済み巡目の前(${low_junme})か後ろ(${high_junme})のみです。`
                     });
-                    const high_junme = Math.max(...junmes) + 1;
-                    const low_junme = Math.min(...junmes) - 1;
-                    if(high_junme != junme && low_junme != junme){
-                        g.Modal.alert({
-                            message: `指定できる巡目は配置済み巡目の前(${low_junme})か後ろ(${high_junme})のみです。`
-                        });
-                        return;
-                    }
+                    return;
                 }
-                const url = $event.url;
-                const mailaddress = $event.mailaddress;
-                const password = $event.password;
-                g.API.git_clone(junme, url, mailaddress, password).then(function(response){
+            }
+            g.API.git_clone(junme, url, mailaddress, password).then(function(response){
+                g.location.reload();
+            });
+        },
+        on_sync_repository_click: function(){
+            const message = [
+                "点検データを同期します",
+                "※時間がかかります。Wifi下で実行して下さい",
+                "※同期に必要な認証情報は登録済みの前提です",
+                "※競合は解消できません", "",
+                "１．最新データをダウンロードします（マージ）",
+                "２．点検データをアップロードします",
+            ].join("\n");
+            const callback = function(){
+                g.API.sync_repositories().then(function(response){
                     g.location.reload();
                 });
-            }else{
-                callback();
-            }
+            };
+            g.Modal.confirm({
+                message: message,
+                on_ok: callback,
+            });
         },
     },
 };

@@ -63,10 +63,10 @@ module GitUtil
         git.push
     end
 
-    def self.refresh git
+    def self.refresh git, clear_change=false
         #※参照専用なのでローカルの変更を無効にする
         #  GitHubリポジトリ作っただけ（コミットなし？）だとエラー
-        git.checkout# git checkout .
+        git.checkout if clear_change# git checkout .
         #最新に更新
         git.pull
     end

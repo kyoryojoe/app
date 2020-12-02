@@ -76,8 +76,9 @@
                         </li>
                         <li>
                             <a href="https://www.convertcsv.com/csv-to-yaml.htm" target="_blank">
-                                <span class="icon is-medium"><i class="fa fa-print"></i></span>
                                 <span>変換（CSV → YAML）</span>
+                                <span class="icon is-medium"><i class="fa fa-external-link"></i></span>
+            
                             </a>
                         </li>
                     </ol>
@@ -85,13 +86,19 @@
                     <h2 class="subtitle">データ</h2>
                     <ul>
                         <li>
-                            <span class="icon is-medium"><i class="fa fa-refresh"></i></span>
-                            <span>点検データ同期</span>
+                            <p>
+                                <span>点検データ同期</span>
+                                <button class="button is-small" @click="on_sync_repository_click">
+                                    <span class="icon is-medium"><i class="fa fa-refresh"></i></span>
+                                </button>
+                            </p>
                         </li>
                         <li>
-                            <p @click="on_git_clone_click">
-                                <span class="icon is-medium"><i class="fa fa-cloud-download"></i></span>
+                            <p>
                                 <span>巡目リポジトリ配置</span>
+                                <button class="button is-small" @click="on_git_clone_click">
+                                    <span class="icon is-medium"><i class="fa fa-cloud-download"></i></span>
+                                </button>
                             </p>
                         </li>
                     </ul>
@@ -572,7 +579,7 @@
     </section>
     <section id="footer" class="mt-4 mb-4">
         <p style="text-align: center;">
-            Kyo Ryo Joe &copy; 2020 yamahei
+            &copy; 2020 KyoRyoJoe
         </p>
     </section>
 

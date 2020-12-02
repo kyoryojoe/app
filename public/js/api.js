@@ -61,6 +61,11 @@
         };
         return axios.put(url, params);
     };
+    api.prototype.sync_repositories = function(){
+        const url = `${TOOLS_BASE_URI}/sync`;
+        const params = {};
+        return axios.put(url, params);
+    };
 
 
     //Inspect

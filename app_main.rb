@@ -95,6 +95,15 @@ class MyApp < Sinatra::Base
             tools.clone(junme_dir, params[:url], params[:mailaddress], params[:password])
             200
         end
+        put '/sync' do
+            repositories = inspect.get_repositories
+            repositories.each{|repositoriy|
+                tools.download(repositoriy[:path])
+                tools.upload(repositoriy[:path]) if repositoriy[:need_sync]
+            }
+            200
+        end
+        
         
     end
 
