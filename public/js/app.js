@@ -17,7 +17,8 @@ const api_end = function(){
 const api_error = function(error){
     console.log("abort loader");
     console.log(error);
-    g.Modal.alert({message: error.message});
+    const message = (error?.response?.data?.message || error?.message || error);
+    g.Modal.alert({message: message});
     state.loader_visible = loader_func.abort_loader();
 };
 
