@@ -97,10 +97,15 @@ class MyApp < Sinatra::Base
         end
         put '/sync' do
             repositories = inspect.get_repositories
-            repositories.each{|repositoriy|
-                tools.download(repositoriy[:path])
-                tools.upload(repositoriy[:path]) if repositoriy[:need_sync]
-            }
+            begin
+                repositories.each{|repositoriy|
+                    tools.download(repositoriy[:path])
+                    tools.upload(repositoriy[:path]) if repositoriy[:need_sync]
+                }
+            rescue Exception => e
+                raise StandardError.new("#{name}のcommit, pushに失敗しました: #{e.message}")
+            end
+
             200
         end
         
