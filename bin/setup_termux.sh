@@ -10,7 +10,7 @@ if [ ! -d ~/storage ]; then # まだなら実施
   echo "  pkg update -y"
   echo 以下のコマンドを入力してストレージを初期化してください
   echo "  termux-setup-storage"
-  return 1
+  exit 1
 fi
 if [ -d ~/kyoryojoe ]; then # あれば確認
   echo [KyoRyoJoeがインストールされています]
@@ -19,7 +19,7 @@ if [ -d ~/kyoryojoe ]; then # あれば確認
   read -p "続行しますか？(y/n): " confirm
   case "$confirm" in
     [yY] ) $(rm -f -d -r ~/kyoryojoe);;
-    * ) return 1 ;;
+    * ) exit 1 ;;
   esac
 fi
 
