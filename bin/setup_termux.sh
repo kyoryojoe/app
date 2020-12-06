@@ -23,6 +23,9 @@ if [ -d ~/kyoryojoe ]; then # あれば確認
   esac
 fi
 
+# kyoryojoe停止
+kill -9 $(ps aux | grep -v grep | grep ruby | grep "app.rb" | awk '{ print $2}')
+
 # 環境設定
 cd #~
 
