@@ -16,8 +16,8 @@ if [ -d ~/kyoryojoe ]; then # あれば確認
   echo [KyoRyoJoeがインストールされています]
   echo 再インストールすると点検データは削除されます
   echo 同期が必要な場合、中断して下さい
-  read -p "続行しますか？(y/n): " INPUT
-  case "$INPUT" in
+  read -p "続行しますか？(y/n): " confirm
+  case "$confirm" in
     [yY] ) $(rm -f -d -r ~/kyoryojoe);;
     * ) exit 1 ;;
   esac
