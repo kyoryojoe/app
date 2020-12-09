@@ -239,8 +239,8 @@
             <category-box-item :title="'道路区分'">{{ bridge.road_division_cd | n2_road_type }}</category-box-item>
             <category-box-item :title="'緊急輸送道路'">{{ bridge.emergency_transport_road | f2_ox }}</category-box-item>
             <category-box-item :title="'交通量'">{{ bridge.traffic_volume }}</category-box-item>
-            <category-box-item :title="'占有物件'" v-if="bridge.occupied_property">{{ bridge.occupied_property_name }}</category-box-item>
-            <category-box-item :title="'占有物件'" v-else>{{ bridge.occupied_property | f2_umu }}</category-box-item>
+            <category-box-item :title="'占用物件'" v-if="bridge.occupied_property">{{ bridge.occupied_property_name }}</category-box-item>
+            <category-box-item :title="'占用物件'" v-else>{{ bridge.occupied_property | f2_umu }}</category-box-item>
         </category-box>
         <category-box :name="'橋梁仕様'">
             <category-box-item :title="'設置年次'">{{ bridge.construction_year | n2_y }}</category-box-item>

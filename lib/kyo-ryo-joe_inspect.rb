@@ -206,12 +206,14 @@ module KyoRyoJoe
 
             counter, func = 0, Proc.new { counter += 1 }
             inspects.push(base.merge({ seq: func.call, group: GROUP_UPPER, part: PART_PAVEMENT, name: NAME_PAVEMENT, checks: [] }))#舗装面１つ
-            bridge[:number_of_griders].times{#主桁
+            number_of_griders = bridge[:number_of_griders] || 0
+            number_of_griders.times{#主桁
                 inspects.push(base.merge({
                     seq: func.call, group: GROUP_UPPER, part: PART_GRIDER, name: NAME_GRIDER, checks: []
                 }))
             }
-            bridge[:number_of_beams].times{#横桁
+            number_of_beams = bridge[:number_of_beams] || 0
+            number_of_beams.times{#横桁
                 inspects.push(base.merge({
                     seq: func.call, group: GROUP_UPPER, part: PART_BEAM, name: NAME_BEAM, checks: [] 
                 }))
@@ -227,7 +229,8 @@ module KyoRyoJoe
                     seq: func.call, group: GROUP_UNDER, part: PART_ABUTMENT, name: NAME_ABUTMENT, checks: []
                 }))
             }
-            bridge[:number_of_piers].times{#橋脚
+            number_of_piers = bridge[:number_of_piers] || 0
+            number_of_piers.times{#橋脚
                 inspects.push(base.merge({
                     seq: func.call, group: GROUP_UNDER, part: PART_PIER, name: NAME_PIER, checks: []
                 }))

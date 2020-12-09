@@ -201,11 +201,10 @@ class MyApp < Sinatra::Base
                 required(:junme).filled(:integer)
                 required(:bridge_id).filled(:integer)
                 required(:inspect_cd).filled(:string, format?: HEX8_FORMAT)
-                # required(:data).value(inspect_type)
-                required(:header).filled()
-                required(:bridge).filled()
-                required(:outline).filled()
-                required(:inspects).filled()#.value(:array).each(assign_type)
+                required(:header).filled()#.value(header_type)
+                required(:bridge).filled()#.value(bridge_type)
+                required(:outline).filled()#.value(outline_type)
+                required(:inspects).filled()#.value(:array).each(inspect_type)
             }}
             data = {
                 header: params[:header],
