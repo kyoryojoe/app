@@ -112,6 +112,23 @@ figure.bg_640x480 > img{
     z-index: 40;/* header is 30 */
 }
 
+/**/
+*[ui='child-cards'] {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+*[ui='child-cards'] .card {
+    margin: 2rem 1rem;
+}
+@media screen and (max-width: 768px) {
+    *[ui='child-cards']{
+        display: block;
+    }
+    *[ui='child-cards'] .card {
+        margin-bottom: 3rem;
+    }
+}
+
 /* 
     Pointer color animation
         TODO: add style for pointer elemnt below

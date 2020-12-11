@@ -119,62 +119,59 @@
             <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
             橋一覧
         </h1>
-        TODO: フィルタ
 
-        <div class="columns" v-for="column in columns">
+        <search_condition :orders="orders" @search="on_search"></search_condition>
 
-            <div class="column is-3" v-for="bridge in column">
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-1by1 bg_640x480">
-                            <img :src="bridge.inspects | inspects_from_outline_image | url_to_no_cache" alt="">
-                        </figure>
+        <div ui="child-cards">
+            <div class="card" v-for="bridge in bridges">
+                <div class="card-image">
+                    <figure class="image is-1by1 bg_640x480">
+                        <img :src="bridge.inspects | inspects_from_outline_image | url_to_no_cache" alt="">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <p class="has-text-grey">{{ bridge.bridge_length }} m</p>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4" :title="bridge.name_yomi" style="overflow: hidden;">
+                                {{ bridge.bridge_name }}
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <maru-button :icon="`fa-chevron-right`" @click="on_bridge_selected(bridge)"></maru-button>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <p class="has-text-grey">{{ bridge.bridge_length }} m</p>
-                            </div>
-                            <div class="media-content">
-                                <p class="title is-4" :title="bridge.name_yomi" style="overflow: hidden;">
-                                    {{ bridge.bridge_name }}
+                    <div class="content">
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <p class="subtitle is-6" :title="bridge.address_yomi">
+                                    {{ bridge.address }}
                                 </p>
                             </div>
-                            <div class="media-right">
-                                <maru-button :icon="`fa-chevron-right`" @click="on_bridge_selected(bridge)"></maru-button>
+                            <div class="control">
+                                <div class="tags has-addons" style="">
+                                    <span class="tag">今回</span>
+                                    <span class="tag is-primary" v-if="bridge.ui.status.now.has_inspect">
+                                        {{ bridge.ui.status.now.judge_kbn | n2_judge_kbn }}
+                                    </span>
+                                    <span class="tag">{{ bridge.ui.status.now.status }}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="content">
-                            <div class="field is-grouped is-grouped-multiline">
-                                <div class="control">
-                                    <p class="subtitle is-6" :title="bridge.address_yomi">
-                                        {{ bridge.address }}
-                                    </p>
-                                </div>
-                                <div class="control">
-                                    <div class="tags has-addons" style="">
-                                        <span class="tag">今回</span>
-                                        <span class="tag is-primary" v-if="bridge.ui.status.now.has_inspect">
-                                            {{ bridge.ui.status.now.judge_kbn | n2_judge_kbn }}
-                                        </span>
-                                        <span class="tag">{{ bridge.ui.status.now.status }}</span>
-                                    </div>
-                                </div>
-                                <div class="control">
-                                    <div class="tags has-addons">
-                                        <span class="tag">前回</span>
-                                        <span class="tag is-warning" v-if="bridge.ui.status.pre.has_inspect">
-                                            {{ bridge.ui.status.pre.judge_kbn | n2_judge_kbn }}
-                                        </span>
-                                        <span class="tag">{{ bridge.ui.status.pre.status }}</span>
-                                    </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                    <span class="tag">前回</span>
+                                    <span class="tag is-warning" v-if="bridge.ui.status.pre.has_inspect">
+                                        {{ bridge.ui.status.pre.judge_kbn | n2_judge_kbn }}
+                                    </span>
+                                    <span class="tag">{{ bridge.ui.status.pre.status }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>    
-            </div>
-            
+                </div>
+            </div>    
         </div>
         
     </div>
@@ -617,6 +614,7 @@
     <script src="js/components/new-tab-link.js"></script>
     <script src="js/components/children-map.js"></script>
     <script src="js/components/git-clone.js"></script>
+    <script src="js/components/search_condition.js"></script>
     <script src="js/pages/inspect/vue-page-work.js"></script>
     <script src="js/pages/inspect/vue-page-list.js"></script>
     <script src="js/pages/inspect/vue-page-bridge.js"></script>

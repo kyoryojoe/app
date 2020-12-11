@@ -21,22 +21,21 @@ const list_page = g.list_page = {
                     judge_kbn: Number,                    
                 }]                
             }*/],
+            orders: [
+                {name: "id", label: "id"},
+                {name: "bridge_name", label: "橋梁名"},
+                {name: "address", label: "所在地"},
+                {name: "route_name", label: "路線名"},
+                {name: "bridge_length", label: "橋長"},                
+            ],
+            search_condition: {
+                keyword: null,
+                orderby: null,
+                orderasc: true,//asc: true, desc: false
+            }
         };
     },
-    computed: {
-        columns: function(){
-            const MAX_LENGTH_INLIST = 100;//TODO: 表示する最大件数（フィルタで頑張る
-            const MAX_LENGTH_INROW = 4;//TODO: PCで横何橋表示するか
-            const rows = [];
-            for(let row=0; row<Math.ceil(this.bridges.length / MAX_LENGTH_INROW); row++){
-                const col = row * MAX_LENGTH_INROW;
-                var bridge_rows = this.bridges.slice(col, col + MAX_LENGTH_INROW); // i*cnt番目からi*cnt+cnt番目まで取得
-                rows.push(bridge_rows);
-            }
-            return rows;
-            // return [[bridge, bridge, bridge, bridge], [bridge, bridge]];
-        },
-    },
+    computed: {},
     beforeMount: function(){
         const self = this;
         const junme = this.junme = this.$route.params.junme;
@@ -70,6 +69,38 @@ const list_page = g.list_page = {
             };
             this.$emit("bridge_select", param);
         },
+        on_search: function($event){
+            const cond = this.search_condition;
+            const keyword  = $event.keyword  || "";
+            const orderby  = $event.orderby  || "id";
+            const orderasc = !!$event.orderasc;
+
+            if(cond.keyword != keyword || cond.orderby != orderby || cond.orderasc != orderasc){
+                let bridges = undefined;
+                this.bridges.splice(0);
+                if(keyword){
+                    bridges = this.original_bridges.filter(function(bridge){
+                        if(bridge.bridge_name && bridge.bridge_name.indexOf(keyword) >= 0){ return true; }
+                        if(bridge.bridge_name_kana && bridge.bridge_name_kana.indexOf(keyword) >= 0){ return true; }
+                        if(bridge.address && bridge.address.indexOf(keyword) >= 0){ return true; }
+                        if(bridge.address_kana && bridge.address_kana.indexOf(keyword) >= 0){ return true; }
+                        if(bridge.route_name && bridge.route_name.indexOf(keyword) >= 0){ return true; }
+                        return false;
+                    });
+                }else{
+                    bridges = this.original_bridges.concat();
+                }
+                //TODO: 点検日に対応できない
+                bridges.sort(function(a, b){
+                    const o = orderasc ? 1 : -1;
+                    if(a[orderby] < b[orderby]){ return -1 * o; }
+                    if(a[orderby] > b[orderby]){ return  1 * o; }
+                    return (a.id - b.id) * o;
+                });
+                //TODO: 最大件数
+                this.bridges.push(...bridges);
+            }
+        }
     },
 };
 
