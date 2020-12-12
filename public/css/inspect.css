@@ -125,6 +125,7 @@ figure.bg_640x480 > img{
         display: block;
     }
     *[ui='child-cards'] .card {
+        margin: 2rem 0;
         margin-bottom: 3rem;
     }
 }

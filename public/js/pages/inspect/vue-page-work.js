@@ -87,7 +87,7 @@ const work_page = g.work_page = {
         on_sync_repository_click: function(){
             const message = [
                 "点検データを同期します",
-                "※時間がかかります。Wifi下で実行して下さい",
+                "※時間がかかります。Wifi環境で実行して下さい",
                 "※同期に必要な認証情報は登録済みの前提です",
                 "※競合は解消できません", "",
                 "１．最新データをダウンロードします（マージ）",

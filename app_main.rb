@@ -103,7 +103,7 @@ class MyApp < Sinatra::Base
                     tools.upload(repositoriy[:path]) if repositoriy[:need_sync]
                 }
             rescue Exception => e
-                raise StandardError.new("#{name}のcommit, pushに失敗しました: #{e.message}")
+                raise StandardError.new("点検データのcommit, pushに失敗しました: #{e.message}")
             end
 
             200

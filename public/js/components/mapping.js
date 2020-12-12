@@ -59,13 +59,13 @@
                     <i class="fa fa-4x fa-crosshairs"></i>
                 </span>                
                 <p class="box_in_figure_bl">
-                    <a class="button is-warning" @click="on_cancel">
+                    <a class="button" @click="on_cancel">
                         <span>キャンセル</span>
                     </a>
                 </p>
                 <p class="box_in_figure_br">
                     <camera v-if="mode_is_capture" @captured="on_captured"></camera>
-                    <a v-if="mode_is_only" class="button " @click="on_ok">
+                    <a v-if="mode_is_only" class="button is-primary" @click="on_ok">
                         <span>OK</span>
                     </a>
                 </p>

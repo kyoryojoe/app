@@ -2,6 +2,8 @@
 
 (function(g){
 
+const BRIDGES_MAX_LENGTH = 100;
+
 /** list */
 const list_name = g.list_name = "list_page";
 const list_path = g.list_path = "/list/:junme";
@@ -30,7 +32,7 @@ const list_page = g.list_page = {
             ],
             search_condition: {
                 keyword: null,
-                orderby: null,
+                orderby: "id",
                 orderasc: true,//asc: true, desc: false
             }
         };
@@ -50,9 +52,7 @@ const list_page = g.list_page = {
                 return bridge;
             });
             self.original_bridges.push(...bridges);
-            console.log(bridges);
-            //TODO: filter and sort
-            self.bridges.push(...self.original_bridges);
+            self.on_search(self.search_condition);
         });
     },
     mounted: function(){
@@ -77,7 +77,6 @@ const list_page = g.list_page = {
 
             if(cond.keyword != keyword || cond.orderby != orderby || cond.orderasc != orderasc){
                 let bridges = undefined;
-                this.bridges.splice(0);
                 if(keyword){
                     bridges = this.original_bridges.filter(function(bridge){
                         if(bridge.bridge_name && bridge.bridge_name.indexOf(keyword) >= 0){ return true; }
@@ -92,13 +91,13 @@ const list_page = g.list_page = {
                 }
                 //TODO: 点検日に対応できない
                 bridges.sort(function(a, b){
-                    const o = orderasc ? 1 : -1;
-                    if(a[orderby] < b[orderby]){ return -1 * o; }
-                    if(a[orderby] > b[orderby]){ return  1 * o; }
-                    return (a.id - b.id) * o;
+                    const order = orderasc ? 1 : -1;
+                    if(a[orderby] < b[orderby]){ return -1 * order; }
+                    if(a[orderby] > b[orderby]){ return  1 * order; }
+                    return (a.id - b.id) * order;
                 });
-                //TODO: 最大件数
-                this.bridges.push(...bridges);
+                this.bridges.splice(0);
+                this.bridges.push(...(bridges.slice(0, BRIDGES_MAX_LENGTH)));
             }
         }
     },

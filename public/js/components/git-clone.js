@@ -13,8 +13,8 @@
                     必要に応じてコマンドラインから操作してください。
                 </p>
                 <div class="field is-grouped">
-                    <div class="control has-icons-left">
-                        <input class="input" type="number" v-model="junme" />
+                    <div class="control has-icons-left" style="width: 20%; min-width: 6rem; ">
+                        <input class="input has-text-right" type="number" v-model="junme" />
                         <span class="icon is-small is-left">
                             巡目
                         </span>
@@ -25,10 +25,10 @@
                 </div>
                 <div class="field is-grouped">
                     <p class="control is-expanded">
-                        <input class="input" type="text" v-model="mailaddress" placeholder="ユーザID（任意）"/>
+                        <input class="input" type="text" v-model="mailaddress" placeholder="ユーザID"/>
                     </p>
                     <p class="control is-expanded">
-                        <input class="input" type="text" v-model="password" placeholder="パスワード（任意）"/>
+                        <input class="input" type="text" v-model="password" placeholder="パスワード"/>
                     </p>
                 </div>
                 <p style="text-align: right;">
