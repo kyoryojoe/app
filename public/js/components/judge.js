@@ -18,11 +18,21 @@
                 </p>
                 <p>
                     <div class="buttons has-addons is-centered">
-                        <button :class="{'is-primary': !kbn}" class="button" @click="set_kbn(0)">{{ '　' }}</button>
-                        <button :class="{'is-primary': kbn==1}" class="button" @click="set_kbn(1)">Ⅰ</button>
-                        <button :class="{'is-primary': kbn==2}" class="button" @click="set_kbn(2)">Ⅱ</button>
-                        <button :class="{'is-primary': kbn==3}" class="button" @click="set_kbn(3)">Ⅲ</button>
-                        <button :class="{'is-primary': kbn==4}" class="button" @click="set_kbn(4)">Ⅳ</button>
+                        <button :class="{'is-primary': !kbn}" class="button" @click="set_kbn(0)">
+                            <judge_kbn :value="0"></judge_kbn>
+                        </button>
+                        <button :class="{'is-primary': kbn==1}" class="button" @click="set_kbn(1)">
+                            <judge_kbn :value="1"></judge_kbn>
+                        </button>
+                        <button :class="{'is-primary': kbn==2}" class="button" @click="set_kbn(2)">
+                            <judge_kbn :value="2"></judge_kbn>
+                        </button>
+                        <button :class="{'is-primary': kbn==3}" class="button" @click="set_kbn(3)">
+                            <judge_kbn :value="3"></judge_kbn>
+                        </button>
+                        <button :class="{'is-primary': kbn==4}" class="button" @click="set_kbn(4)">
+                            <judge_kbn :value="4"></judge_kbn>
+                        </button>
                     </div>            
                 </p>
                 <p style="text-align: right;">

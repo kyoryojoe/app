@@ -7,15 +7,12 @@
  */
 const loader_func = g.get_loader_func();
 const api_start = function(){
-    console.log("start loader");
     state.loader_visible = loader_func.show_loader();
 };
 const api_end = function(){
-    console.log("start loader");
     state.loader_visible = loader_func.hide_loader();
 };
 const api_error = function(error){
-    console.log("abort loader");
     console.log(error);
     const message = (error?.response?.data?.message || error?.message || error);
     g.Modal.alert({message: message});

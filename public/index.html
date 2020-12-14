@@ -154,7 +154,7 @@
                                 <div class="tags has-addons" style="">
                                     <span class="tag">今回</span>
                                     <span class="tag is-primary" v-if="bridge.ui.status.now.has_inspect">
-                                        {{ bridge.ui.status.now.judge_kbn | n2_judge_kbn }}
+                                        <judge_kbn :value="bridge.ui.status.now.judge_kbn"></judge_kbn>
                                     </span>
                                     <span class="tag">{{ bridge.ui.status.now.status }}</span>
                                 </div>
@@ -163,7 +163,7 @@
                                 <div class="tags has-addons">
                                     <span class="tag">前回</span>
                                     <span class="tag is-warning" v-if="bridge.ui.status.pre.has_inspect">
-                                        {{ bridge.ui.status.pre.judge_kbn | n2_judge_kbn }}
+                                        <judge_kbn :value="bridge.ui.status.pre.judge_kbn"></judge_kbn>
                                     </span>
                                     <span class="tag">{{ bridge.ui.status.pre.status }}</span>
                                 </div>
@@ -213,7 +213,9 @@
             <category-box-item :title="inspect.junme | n2_junme_short" :key="inspect.inspect_cd" v-for="inspect in inspects">
                 <div class="media" style="width: 100%;">
                     <template v-if="inspect.inspect_cd && inspect.date">
-                        <div class="media-left">{{ inspect.judge_kbn | n2_judge_kbn }}</div>
+                        <div class="media-left">
+                            <judge_kbn :value="inspect.judge_kbn"></judge_kbn>
+                        </div>
                         <div class="media-content">{{ inspect.date | date_ymd }}</div>
                     </template>
                     <template v-if="inspect.inspect_cd && !inspect.date">
@@ -258,7 +260,8 @@
     <div ui="page">
         <h1 class="title">
             <maru-button :icon="`fa-chevron-left`" @click="$emit('back_select')"></maru-button>
-            {{ bridge.bridge_name }} : {{ header.judge_kbn | n2_judge_kbn}}
+            <span>{{ bridge.bridge_name }} : </span>
+            <judge_kbn :value="header.judge_kbn"></judge_kbn>
         </h1>
         <h2 ui="page_header" class="mb-2" v-if="ui.render_outline">
             <p>
@@ -306,7 +309,9 @@
                 <div class="message-header" @click="toggle_group_open(group)">
                     <div ui="group_headeer">
                         <p>{{ group.name }}</p>
-                        <p>{{ get_group_judge_kbn(group) | n2_judge_kbn}}</p>
+                        <p>
+                            <judge_kbn :value="get_group_judge_kbn(group)"></judge_kbn>
+                        </p>
                     </div>
                     <maru-button :icon="`fa-chevron-down`" v-if="group.ui.open"></maru-button>
                     <maru-button :icon="`fa-chevron-right`" v-if="!group.ui.open"></maru-button>
@@ -319,7 +324,9 @@
                         <div class="message-header" @click="toggle_part_open(group, part)">
                             <div ui="part_headeer">
                                 <p>{{ part.name }}#{{ part.seq }}</p>
-                                <p>{{ get_part_judge_kbn(part) | n2_judge_kbn }}</p>
+                                <p>
+                                    <judge_kbn :value="get_part_judge_kbn(part)"></judge_kbn>
+                                </p>
                             </div>
                             <maru-button :icon="`fa-chevron-down`" v-if="part.ui.open"></maru-button>
                             <maru-button :icon="`fa-chevron-right`" v-if="!part.ui.open"></maru-button>
@@ -416,24 +423,30 @@
                 <span class="text_shadow_scroll" v-if="inspect.memo">{{ inspect.memo }}</span><br />
                 <memo :obj="inspect" :attr="'memo'" @change="save_and_rerender_inspect()"></memo>
             </p>
+            <p class="box_in_figure_br">
+                <button class="button is-primary" @click="on_append_check">
+                    <span class="icon"><i class="fa fa-search-plus"></i></span>
+                    <span>点検を追加</span>
+                </button>
+            </p>
+
         </figure>
-        <div>
+        <!-- <div>
             <button class="button is-fullwidth" @click="on_append_check">
                 <span class="icon"><i class="fa fa-search-plus"></i></span>
                 <span>点検個所を追加する</span>
             </button>
-        </div>
+        </div> -->
 
         <div v-for="check in check_list" class="columns">
             <div class="column is-3">
                 <article class="message is-white">
                     <div class="message-header" @click="toggle_check_open(check)">
                         <div ui="check_headeer">
+                            <p>点検 #{{ check.seq }}</p>
                             <p>
-                                <span class="icon is-small"><i class="fa fa-search"></i></span>
-                                点検 #{{ check.seq }}
+                                <judge_kbn :value="get_check_judge_kbn(check)"></judge_kbn>
                             </p>
-                            <p>{{ get_check_judge_kbn(check) | n2_judge_kbn}}</p>
                         </div>
                         <maru-button :icon="`fa-chevron-down`" v-if="check.ui.open"></maru-button>
                         <maru-button :icon="`fa-chevron-right`" v-if="!check.ui.open"></maru-button>
@@ -448,6 +461,7 @@
                                 <children-map :children="check.damages" :kbn_func="get_damage_judge_kbn"></children-map>
                                 <p class="box_in_figure_tl">
                                     <span class="text_shadow">
+                                        <span class="icon is-small"><i class="fa fa-search"></i></span>
                                         点検写真
                                         <new-tab-link :href="check.image"></new-tab-link>
                                     </span>
@@ -461,14 +475,13 @@
                                     <span class="text_shadow_scroll" v-if="check.memo">{{ check.memo }}</span><br />
                                     <memo :obj="check" :attr="'memo'" @change="save_and_rerender_check(check, null)"></memo>
                                 </p>
-                                <!-- <p class="box_in_figure_br"></p> -->
+                                <p class="box_in_figure_br">
+                                    <button class="button is-primary" v-if="check.image" @click="on_append_damage(check)">
+                                        <span class="icon"><i class="fa fa-bolt"></i></span>
+                                        <span>損傷を追加</span>
+                                    </button>
+                                </p>
                             </figure>
-                            <div>
-                                <button class="button is-fullwidth" v-if="check.image" @click="on_append_damage(check)">
-                                    <span class="icon"><i class="fa fa-hand-o-right"></i></span>
-                                    <span>損傷個所を追加する</span>
-                                </button>
-                            </div>
                     
                             <div ui="check_thumbs">
                                 <!-- TODO -->
@@ -479,11 +492,12 @@
                                     <div class="message-header" @click="toggle_damage_open(damage)">
                                         <div ui="damage_headeer">
                                             <p>
-                                                <span class="icon is-small"><i class="fa fa-heartbeat"></i></span>
                                                 損傷 #{{ damage.seq }}
                                                 （点検 #{{ check.seq }}）
                                             </p>
-                                            <p>{{ damage.judge_kbn | n2_judge_kbn}}</p>
+                                            <p>
+                                                <judge_kbn :value="damage.judge_kbn"></judge_kbn>
+                                            </p>
                                         </div>
                                         <maru-button :icon="`fa-chevron-down`" v-if="damage.ui.open"></maru-button>
                                         <maru-button :icon="`fa-chevron-right`" v-if="!damage.ui.open"></maru-button>
@@ -495,6 +509,7 @@
                                             <img :src="damage.image | url_to_no_cache" alt="" />
                                             <p class="box_in_figure_tl">
                                                 <span class="text_shadow">
+                                                    <span class="icon is-small"><i class="fa fa-bolt"></i></span>
                                                     損傷写真
                                                     <new-tab-link :href="damage.image"></new-tab-link>
                                                 </span>
@@ -615,6 +630,7 @@
     <script src="js/components/children-map.js"></script>
     <script src="js/components/git-clone.js"></script>
     <script src="js/components/search_condition.js"></script>
+    <script src="js/components/judge_kbn.js"></script>
     <script src="js/pages/inspect/vue-page-work.js"></script>
     <script src="js/pages/inspect/vue-page-list.js"></script>
     <script src="js/pages/inspect/vue-page-bridge.js"></script>

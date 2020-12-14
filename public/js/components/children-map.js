@@ -22,7 +22,7 @@
                 if(!("map" in child)){ throw new Error(`child doesnt have map: ${child}`); }
                 if(!("seq" in child)){ throw new Error(`child doesnt have seq: ${child}`); }
                 const map = child.map;
-                const judge_kbn = this.kbn_func(child)  || 0;
+                const judge_kbn = this.kbn_func(child) || 0;
                 const color = [
                     {r:   0, g:   0, b: 0},
                     {r:   0, g: 255, b: 0},
@@ -30,6 +30,7 @@
                     {r: 255, g: 127, b: 0},
                     {r: 255, g:   0, b: 0},
                 ][judge_kbn];
+
                 return {
                     "margin": "0", "padding": "0.5rem",
                     "width": "15%", "height": "15%",
