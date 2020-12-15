@@ -37,6 +37,23 @@ module GitUtil
         git = open(dir)
         status = git.status
         count = status.changed.length + status.added.length + status.deleted.length + status.untracked.length
+
+        # 競合したファイルはchangedで検出されるのは間違いない
+        # statusで見たときの「type」「stage」が空じゃない？よくわからん
+        #
+        # status.changed
+        # => {"bridges.yaml"=>#<Git::Sta...
+        # status['bridges.yaml']
+        # => #<Git::Status::StatusFile:0x0000000002fdbbf8 @base=#<Git::Base:0x000...>>, 
+        #    @path="bridges.yaml", 
+        #    @type="M", #←
+        #    @stage="3", #←
+        #    @mode_index="100644", 
+        #    @mode_repo="100644", 
+        #    @sha_index="0000000000000000000000000000000000000000", 
+        #    @sha_repo="8d217cbbc094548a87446c39c893755a5e7b950d", 
+        #    @untracked=nil>
+
         count > 0 ? true : false
     end
 
