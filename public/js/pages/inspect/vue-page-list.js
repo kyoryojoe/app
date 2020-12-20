@@ -24,15 +24,18 @@ const list_page = g.list_page = {
                 }]                
             }*/],
             orders: [
-                {name: "id", label: "id"},
-                {name: "bridge_name", label: "橋梁名"},
-                {name: "address", label: "所在地"},
-                {name: "route_name", label: "路線名"},
-                {name: "bridge_length", label: "橋長"},                
+                {name: "id", label: "id", special: false },
+                {name: "bridge_name", label: "橋梁名", special: false },
+                {name: "address", label: "所在地", special: false },
+                {name: "route_name", label: "路線名", special: false },
+                {name: "bridge_length", label: "橋長", special: false },
+                {name: "date", label: "点検日", special: true },
+                {name: "judge_kbn", label: "判定区分", special: true },
             ],
             search_condition: {
                 keyword: null,
                 orderby: "id",
+                special: false,//false: bridge[orderby], true: bridge.inspects[0][orderby]
                 orderasc: true,//asc: true, desc: false
             }
         };
@@ -73,9 +76,15 @@ const list_page = g.list_page = {
             const cond = this.search_condition;
             const keyword  = $event.keyword  || "";
             const orderby  = $event.orderby  || "id";
+            const special  = !!$event.special;
             const orderasc = !!$event.orderasc;
 
             if(cond.keyword != keyword || cond.orderby != orderby || cond.orderasc != orderasc){
+                cond.keyword = keyword;
+                cond.orderby = orderby;
+                cond.special = special;
+                cond.orderasc = orderasc;
+
                 let bridges = undefined;
                 if(keyword){
                     bridges = this.original_bridges.filter(function(bridge){
@@ -89,12 +98,20 @@ const list_page = g.list_page = {
                 }else{
                     bridges = this.original_bridges.concat();
                 }
-                //TODO: 点検日に対応できない
+                
+                const getter = special
+                ? function(_bridge, _by){//点検データでソート
+                    const value = (_bridge?.inspects[0] || {})[_by];
+                    return !value && value !== 0 ? -1 : value;
+                }
+                : function(_bridge, _by){ return _bridge[_by]; }
                 bridges.sort(function(a, b){
                     const order = orderasc ? 1 : -1;
-                    if(a[orderby] < b[orderby]){ return -1 * order; }
-                    if(a[orderby] > b[orderby]){ return  1 * order; }
-                    return (a.id - b.id) * order;
+                    const av = getter(a, orderby);
+                    const bv = getter(b, orderby);
+                    if(av < bv){ return -1 * order; }
+                    if(av > bv){ return  1 * order; }
+                    return 0;
                 });
                 this.bridges.splice(0);
                 this.bridges.push(...(bridges.slice(0, BRIDGES_MAX_LENGTH)));

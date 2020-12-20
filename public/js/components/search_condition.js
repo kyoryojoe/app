@@ -17,7 +17,7 @@
                 <div class="field is-grouped" style="margin-left: 2rem; margin-right: 2rem; margin-bottom: 1rem;">
                     <div class="control is-expanded">
                         <label class="radio" v-for="order in orders">
-                            <input type="radio" name="orderby" :value="order.name" v-model="orderby" />
+                            <input type="radio" name="orderby" :value="order" v-model="orderby" />
                             <span>{{ order.label }}</span>
                         </label>
                     </div>
@@ -36,7 +36,7 @@
         data: function(){
             return {
                 keyword: null,
-                orderby: this.orders[0].name,
+                orderby: this.orders[0],
                 orderasc: true,//asc: true, desc: false
             };
         },
@@ -55,7 +55,8 @@
             trigger: function(){
                 const params = {
                     keyword: this.keyword,
-                    orderby: this.orderby,
+                    orderby: this.orderby.name,
+                    special: this.orderby.special,
                     orderasc: this.orderasc,
                 };
                 this.$emit("search", params);
