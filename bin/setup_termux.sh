@@ -29,6 +29,13 @@ kill -9 $(ps aux | grep -v grep | grep ruby | grep "app.rb" | awk '{ print $2}')
 # 環境設定
 cd #~
 
+echo [SSHをインストールします]
+echo 成功するとバージョンを表示します
+pkg list-all | grep openssh # これやると成功率が上がる？
+pkg install -y openssh # 失敗することあり（もう一度試す
+echo 鍵を生成します
+ssh-keygen -t rsa
+
 echo [Gitをインストールします]
 echo 成功するとバージョンを表示します
 pkg list-all | grep git # これやると成功率が上がる？
@@ -62,7 +69,7 @@ if [ ! -f ~/.bashrc ]; then # まだなら実施
   echo '#KyoRyoJoe start' >> ~/.bashrc
   echo 'cd ~/kyoryojoe/' >> ~/.bashrc
   echo 'bundle exec ruby app.rb &' >> ~/.bashrc
-  echo 'echo KyoRyoJoeが起動しました' >> ~/.bashrc
+  echo 'echo KyoRyoJoeを起動します' >> ~/.bashrc
   echo 'cd -' >> ~/.bashrc
   chmod +x ~/.bashrc
 fi

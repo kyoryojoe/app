@@ -20,15 +20,7 @@
                         </span>
                     </div>
                     <p class="control is-expanded">
-                        <input class="input is-fullwidth" type="text" v-model="url" placeholder="URL" />
-                    </p>
-                </div>
-                <div class="field is-grouped">
-                    <p class="control is-expanded">
-                        <input class="input" type="text" v-model="mailaddress" placeholder="ユーザID"/>
-                    </p>
-                    <p class="control is-expanded">
-                        <input class="input" type="text" v-model="password" placeholder="パスワード"/>
+                        <input class="input is-fullwidth" type="text" v-model="url" placeholder="SSH" />
                     </p>
                 </div>
                 <p style="text-align: right;">
@@ -42,8 +34,6 @@
             return {
                 junme: 0,
                 url: null,
-                mailaddress: null,
-                password: null,
             };
         },
         computed: {},
@@ -57,14 +47,10 @@
                 const params = {
                     junme: this.junme * 1,
                     url: this.url,
-                    mailaddress: this.mailaddress,
-                    password: this.password,
                 };
                 if(params.junme * 1 <= 0){ return; }
                 if(!params.url){ return; }
-                if(!params.url.match(/^https?:.+\.git$/)){ return; }
-                if(!params.mailaddress || !params.password){ return; }//必須（push時に必須）
-                if(params.mailaddress && !params.mailaddress.match(/.+@.+/)){ return; }
+                if(!params.url.match(/^git@.+\.git$/)){ return; }
                 this.$emit("close", params);
             },
         },

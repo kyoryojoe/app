@@ -64,9 +64,7 @@ const work_page = g.work_page = {
 
             const junme = $event.junme * 1;
             const url = $event.url;
-            const mailaddress = $event.mailaddress;
-            const password = $event.password;
-            if(!junme || !url || !mailaddress || !password){ return; }
+            if(!junme || !url){ return; }
             if(this.repositories.length > 0){
                 const junmes = this.repositories.map(function(repository){
                     return repository.junme * 1;
@@ -80,7 +78,7 @@ const work_page = g.work_page = {
                     return;
                 }
             }
-            g.API.git_clone(junme, url, mailaddress, password).then(function(response){
+            g.API.git_clone(junme, url).then(function(response){
                 g.location.reload();
             });
         },

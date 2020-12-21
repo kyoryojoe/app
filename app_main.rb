@@ -19,7 +19,8 @@ end
 # server
 class MyApp < Sinatra::Base
 
-    GIT_FORMAT = /^https?:\/\/.*\.git$/
+    GIT_FORMAT = /^git@.+\.git$/
+    # GIT_FORMAT = /^https?:\/\/.*\.git$/
     MAIL_FORMAT = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     UUID_FORMAT = /^[0-9a-zA-Z\-]{36}$/
     HEX8_FORMAT = /^[0-9a-zA-Z]{16}$/
@@ -32,7 +33,7 @@ class MyApp < Sinatra::Base
     PUBLIC_ROOT_DIR = File.expand_path("public")
     INSPECT_BASE_DIR = File.expand_path("public/inspects")
     FileUtils.mkdir_p(INSPECT_BASE_DIR) if !FileTest.exists?(INSPECT_BASE_DIR)
-    
+
     configure do
         set :bind, '0.0.0.0'
         enable :sessions
@@ -60,9 +61,9 @@ class MyApp < Sinatra::Base
     end
     # web helper
 
-    # 
+    #
     # APP
-    # 
+    #
     get /\..+/ do
         404
     end
@@ -108,8 +109,8 @@ class MyApp < Sinatra::Base
 
             200
         end
-        
-        
+
+
     end
 
 
@@ -118,7 +119,7 @@ class MyApp < Sinatra::Base
     #########
     URL_FOR_INSPECT = "/api/inspect"
     namespace URL_FOR_INSPECT do
-    
+
         get '/' do
             inspect.get_repositories.to_json
         end
@@ -169,7 +170,7 @@ class MyApp < Sinatra::Base
                     damages: [],
                 },
                 damage: {
-                    image: nil, seq: nil, memo: "", 
+                    image: nil, seq: nil, memo: "",
                     judge_kbn: 0,# 0, 1 ~ 4
                     map: { x: 0, y: 0, z: 0 },# xy: -1.0~1.0, z: 0<0.5
                 }
@@ -190,12 +191,12 @@ class MyApp < Sinatra::Base
             #     required(:created).filled(:string, format?: DATETIME_FORMAT)
             #     optional(:finished).maybe(:string, format?: DATETIME_FORMAT)
             #     optional(:latest).maybe(inspect_key_type)
-            # end    
+            # end
             # bridge_type = :hash #TODO: 定義疲れた
             # outline_type = Dry::Schema.Params do
             #     optional(:image).maybe(:string)
             #     optional(:memo).maybe(:string)
-            # end    
+            # end
             # inspect_type = :hash #TODO: 定義疲れた
             validates{ params{
                 required(:junme).filled(:integer)
