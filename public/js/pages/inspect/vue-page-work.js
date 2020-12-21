@@ -101,6 +101,14 @@ const work_page = g.work_page = {
                 on_ok: callback,
             });
         },
+        on_show_pubkey_click: function(){
+            const self = this;
+            g.API.get_ssh_pubkey().then(function(response){
+                const key = response.data;
+                const message = key || "鍵ファイルがありません";
+                g.Modal.alert({ message: message });
+            });
+        },
     },
 };
 })(this);

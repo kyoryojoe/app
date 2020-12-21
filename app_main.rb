@@ -109,6 +109,12 @@ class MyApp < Sinatra::Base
 
             200
         end
+        get '/pubkey' do
+            ssh_dir = File.expand_path("~/.ssh")
+            pattern = File.join(ssh_dir, "*.pub")
+            path = Dir.glob(pattern).shift
+            path ? File.read(path) : ""
+        end
 
 
     end

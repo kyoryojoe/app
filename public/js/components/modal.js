@@ -15,7 +15,7 @@
     const component = {
         template: `
             <popup :visible="visible">
-                <p>
+                <p style="word-break: break-all;">
                     <template v-for="message in messages">
                         {{ message }}<br/>
                     </template>
@@ -54,7 +54,7 @@
     };
 
     g.Vue.component('modal', component);
-    
+
     const func = function(){};
     func.prototype.alert = function(params){
         this.show_modal(Object.assign(params, {

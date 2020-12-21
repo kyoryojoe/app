@@ -66,6 +66,11 @@
         const params = {};
         return axios.put(url, params);
     };
+    api.prototype.get_ssh_pubkey = function(){
+        const url = `${TOOLS_BASE_URI}/pubkey`;
+        const params = {};
+        return axios.get(url, params);
+    };
 
 
     //Inspect
