@@ -56,11 +56,14 @@ pkg list-all | grep vim # これやると成功率が上がる？
 pkg install vim -y # 失敗することあり（もう一度試す
 vim --version
 
-# Gitアカウント
+# GitHubアカウント関連
 if [ -z $(git config --global user.email) ]; then
   echo [GitHubアカウントを登録します]
   read -p "mail address for github: " mailaddr
   git config --global user.email "$mailaddr"
+fi
+if [ ! -f ~/.ssh/known_hosts ]; then # まだなら実施
+  ssh-keyscan github.com >> ~/.ssh/known_hosts
 fi
 
 # アプリインストール
