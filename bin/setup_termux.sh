@@ -56,6 +56,13 @@ pkg list-all | grep vim # これやると成功率が上がる？
 pkg install vim -y # 失敗することあり（もう一度試す
 vim --version
 
+# Gitアカウント
+if [ -z $(git config --global user.email) ]; then
+  echo [GitHubアカウントを登録します]
+  read -p "mail address for github: " mailaddr
+  git config --global user.email "$mailaddr"
+fi
+
 # アプリインストール
 echo [KyoRyoJoeをインストールします]
 git clone https://github.com/kyoryojoe/app.git kyoryojoe
